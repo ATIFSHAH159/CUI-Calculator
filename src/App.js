@@ -7,6 +7,7 @@ import ThreeLabsubLabOnly from './ThreeLabsubLabOnly';
 import FourLabsubLabOnly from './FourLabsubLabOnly';
 import ThreeLabsub from './ThreeLabsub';
 import Simplethreesubject from './Simplethreesubject';
+import FourLabsub from './Fourlabsub';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/3labsubonly" element={<ThreeLabsubLabOnly />} />
         <Route path="/4labsubonly" element={<FourLabsubLabOnly />} />
         <Route path="/3chsimple" element={<Simplethreesubject/>} />
-        <Route path="/4chlab" element={<div>4 CH LAB Component</div>} />
+        <Route path="/4chlab" element={<FourLabsub/>} />
         <Route path="/semester-gpa" element={<div>SEMESTER GPA Component</div>} />
         <Route path="/cgpa" element={<div>CGPA CALCULATE Component</div>} />
       </Routes>
