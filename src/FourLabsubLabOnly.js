@@ -1,13 +1,33 @@
 import React, { useState } from 'react';
-import './Assests/Fourlab.css';
+import './Assests/ThreeLabsub.css';
 
-const FourLabsubLabOnly = () => {
-  const [labAssignmentCount, setLabAssignmentCount] = useState();
+const ThreeLabsubLabOnly = () => {
+  const [labAssignmentCount, setLabAssignmentCount] = useState(0);
   const [labAssignmentScores, setLabAssignmentScores] = useState([]);
   const [labMidterm, setLabMidterm] = useState({ obtained: '', total: '' });
   const [labFinal, setLabFinal] = useState({ obtained: '', total: '' });
   const [percentage, setPercentage] = useState(null);
   const [isBeforeMid, setIsBeforeMid] = useState(true);
+
+  const handleLabAssignmentCountChange = (count) => {
+    const newCount = Math.max(0, count);
+    setLabAssignmentCount(newCount);
+
+    // Adjust labAssignmentScores based on the new count
+    const newScores = [...labAssignmentScores];
+
+    // If increasing count, fill new entries with default values
+    if (newCount > newScores.length) {
+      for (let i = newScores.length; i < newCount; i++) {
+        newScores[i] = { obtained: '', total: '' };
+      }
+    } else {
+      // If decreasing count, slice the array to the new length
+      newScores.length = newCount;
+    }
+    
+    setLabAssignmentScores(newScores);
+  };
 
   const handleLabAssignmentChange = (index, name, value) => {
     const newScores = [...labAssignmentScores];
@@ -16,33 +36,49 @@ const FourLabsubLabOnly = () => {
   };
 
   const calculatePercentage = () => {
-    // Lab Assignment Total Calculation
-    const labAssignmentTotal = labAssignmentScores.reduce(
-      (sum, labAssignment) => sum + (labAssignment.obtained / labAssignment.total) * 25,
-      0
-    );
+    // Total obtained and total marks for lab assignments
+    let totalObtained = 0;
+    let totalPossible = 0;
+
+    labAssignmentScores.forEach(labAssignment => {
+        totalObtained += labAssignment.obtained || 0; // Ensure value is not NaN
+        totalPossible += labAssignment.total || 0; // Ensure value is not NaN
+    });
+
+    // Calculate the lab assignment percentage
+    const labAssignmentPercentage = (totalObtained / totalPossible) * 25; // 25% contribution
+    console.log(`Lab Assignment Total Percentage: ${labAssignmentPercentage}%`);
 
     // Lab Midterm Score Calculation
-    const labMidtermScore = (labMidterm.obtained / labMidterm.total) * 25;
+    const labMidtermScore = (labMidterm.obtained / labMidterm.total) * 25; // 25% contribution
+    console.log(`Lab Midterm Percentage: ${labMidtermScore}%`);
 
     // Lab Final Score Calculation (only if "After Mid")
     let labFinalScore = 0;
     if (!isBeforeMid) {
-      labFinalScore = (labFinal.obtained / labFinal.total) * 50;
+        labFinalScore = (labFinal.obtained / labFinal.total) * 50; // 50% contribution
     }
+    console.log(`Lab Final Percentage: ${labFinalScore}%`);
 
     // Final Score Calculation
-    let totalScore = labAssignmentTotal + labMidtermScore;
-    let totalWeight = 50; // 25 (Assignments) + 25 (Midterm)
+    let totalScore = labAssignmentPercentage + labMidtermScore + labFinalScore;
 
-    if (!isBeforeMid) {
-      totalScore += labFinalScore;
-      totalWeight += 50; // Add Final's 50% weight
+    // Calculate Total Weight
+    let totalWeight = 0;
+
+    if (isBeforeMid) {
+        totalWeight = 50; // Before Mid: Assignments + Midterm = 50%
+    } else {
+        totalWeight = 100; // After Mid: Assignments + Midterm + Final = 100%
     }
 
+    // Adjust the final percentage calculation
     const finalPercentage = (totalScore / totalWeight) * (isBeforeMid ? 12.50 : 25.00);
     setPercentage(finalPercentage.toFixed(2));
-  };
+
+    console.log(`Total Score: ${totalScore}, Total Weight: ${totalWeight}, Final Percentage: ${finalPercentage}%`);
+};
+
 
   return (
     <div className="container mt-5">
@@ -55,7 +91,7 @@ const FourLabsubLabOnly = () => {
         <input
           type="number"
           value={labAssignmentCount}
-          onChange={(e) => setLabAssignmentCount(parseInt(e.target.value) || 0)}
+          onChange={(e) => handleLabAssignmentCountChange(parseInt(e.target.value) || 0)}
           className="form-control"
           min="0"
         />
@@ -67,7 +103,8 @@ const FourLabsubLabOnly = () => {
               type="number"
               placeholder="Obtained"
               name="obtained"
-              onChange={(e) => handleLabAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)}
+              value={labAssignmentScores[index]?.obtained || ''}
+              onChange={(e) => handleLabAssignmentChange(index, 'obtained', parseFloat(e.target.value) || 0)}
               className="form-control"
               min="0"
             />
@@ -75,7 +112,8 @@ const FourLabsubLabOnly = () => {
               type="number"
               placeholder="Total"
               name="total"
-              onChange={(e) => handleLabAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)}
+              value={labAssignmentScores[index]?.total || ''}
+              onChange={(e) => handleLabAssignmentChange(index, 'total', parseFloat(e.target.value) || 0)}
               className="form-control mt-2"
               min="0"
             />
@@ -155,4 +193,4 @@ const FourLabsubLabOnly = () => {
   );
 };
 
-export default FourLabsubLabOnly;
+export default ThreeLabsubLabOnly;

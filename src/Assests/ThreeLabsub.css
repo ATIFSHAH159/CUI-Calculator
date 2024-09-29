@@ -3,25 +3,25 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #34495e;
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   }
   
   h2, h4 {
     text-align: center;
-    color: #ecf0f1;
+    color: #4a90e2;
     margin-bottom: 20px;
   }
   
   h5 {
-    color: #bdc3c7;
+    color: #4a90e2;
     margin-top: 10px;
   }
   
   label {
     font-weight: bold;
-    color: #ecf0f1;
+    color: #333;
   }
   
   input {
@@ -50,7 +50,7 @@
   
   .btn {
     width: 100%;
-    background-color: #e74c3c;
+    background-color: #352bc0;
     color: #ecf0f1;
     border: none;
     padding: 10px;
@@ -60,7 +60,7 @@
   }
   
   .btn:hover {
-    background-color: #c0392b;
+    background-color: #352bc0;
   }
   
   .mt-4, .mt-5 {

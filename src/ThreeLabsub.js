@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import './Assests/ThreeLabsub.css'; 
+
 
 const ThreeLabsub = () => {
-  const [quizCount, setQuizCount] = useState();
-  const [assignmentCount, setAssignmentCount] = useState();
-  const [labAssignmentCount, setLabAssignmentCount] = useState();
+  const [quizCount, setQuizCount] = useState(0);
+  const [assignmentCount, setAssignmentCount] = useState(0);
+  const [labAssignmentCount, setLabAssignmentCount] = useState(0);
   const [quizScores, setQuizScores] = useState([]);
   const [assignmentScores, setAssignmentScores] = useState([]);
   const [labAssignmentScores, setLabAssignmentScores] = useState([]);
@@ -14,8 +14,9 @@ const ThreeLabsub = () => {
   const [labFinal, setLabFinal] = useState({ obtained: '', total: '' });
   const [gpa, setGpa] = useState(null);
   const [percentage, setPercentage] = useState(null);
-  const [isAfterMid, setIsAfterMid] = useState(false); // New state for toggle
+  const [isAfterMid, setIsAfterMid] = useState(false); // Toggle for midterm phase
 
+  // Handlers for quiz, assignment, lab assignment changes
   const handleQuizChange = (index, name, value) => {
     const newScores = [...quizScores];
     newScores[index] = { ...newScores[index], [name]: value };
@@ -34,30 +35,74 @@ const ThreeLabsub = () => {
     setLabAssignmentScores(newScores);
   };
 
-  const calculateGPA = () => {
-    // Theory calculations
-    const quizTotal = quizScores.reduce((sum, quiz) => sum + (quiz.obtained / quiz.total) * 15, 0);
-    const assignmentTotal = assignmentScores.reduce((sum, assignment) => sum + (assignment.obtained / assignment.total) * 10, 0);
-    const midtermScore = (midterm.obtained / midterm.total) * 25;
-    const finalScore = isAfterMid ? (final.obtained / final.total) * 50 : 0; // Conditional score based on phase
-    const theoryTotal = isAfterMid 
-      ? (quizTotal + assignmentTotal + midtermScore + finalScore) * 0.6666 
-      : (quizTotal + assignmentTotal + midtermScore) * 0.3333 * 2; // Before Midterm
-      console.log(theoryTotal);
+  // Update input fields dynamically and keep old values
+  const handleQuizCountChange = (count) => {
+    const updatedQuizzes = [...quizScores];
+    for (let i = quizScores.length; i < count; i++) {
+      updatedQuizzes.push({ obtained: '', total: '' });
+    }
+    setQuizScores(updatedQuizzes);
+    setQuizCount(count);
+  };
 
-    // Lab calculations
-    const labAssignmentTotal = labAssignmentScores.reduce((sum, labAssignment) => sum + (labAssignment.obtained / labAssignment.total) * 25, 0);
-    const labMidtermScore = (labMidterm.obtained / labMidterm.total) * 25;
-    const labFinalScore = isAfterMid ? (labFinal.obtained / labFinal.total) * 50 : 0; // Conditional score based on phase
-    const labTotal = isAfterMid 
-      ? (labAssignmentTotal + labMidtermScore + labFinalScore) * 0.3333 
-      : (labAssignmentTotal + labMidtermScore) * 0.1665 * 2; // Before Midterm
-console.log(labTotal);
+  const handleAssignmentCountChange = (count) => {
+    const updatedAssignments = [...assignmentScores];
+    for (let i = assignmentScores.length; i < count; i++) {
+      updatedAssignments.push({ obtained: '', total: '' });
+    }
+    setAssignmentScores(updatedAssignments);
+    setAssignmentCount(count);
+  };
+
+  const handleLabAssignmentCountChange = (count) => {
+    const updatedLabAssignments = [...labAssignmentScores];
+    for (let i = labAssignmentScores.length; i < count; i++) {
+      updatedLabAssignments.push({ obtained: '', total: '' });
+    }
+    setLabAssignmentScores(updatedLabAssignments);
+    setLabAssignmentCount(count);
+  };
+
+  const calculateGPA = () => {
+    // Quiz calculation
+    const totalQuizObtained = quizScores.reduce((sum, quiz) => sum + quiz.obtained, 0);
+    const totalQuizMarks = quizScores.reduce((sum, quiz) => sum + quiz.total, 0);
+    const quizPercentage = totalQuizObtained / totalQuizMarks * 15;
+
+    // Assignment calculation
+    const totalAssignmentObtained = assignmentScores.reduce((sum, assignment) => sum + assignment.obtained, 0);
+    const totalAssignmentMarks = assignmentScores.reduce((sum, assignment) => sum + assignment.total, 0);
+    const assignmentPercentage = totalAssignmentObtained / totalAssignmentMarks * 10;
+
+    // Midterm calculation
+    const midtermPercentage = (midterm.obtained / midterm.total) * 25;
+
+    // Final calculation (only if after midterm)
+    const finalPercentage = isAfterMid ? (final.obtained / final.total) * 50 : 0;
+
+    // Theory total and weight (66.66%)
+    const theoryTotal = quizPercentage + assignmentPercentage + midtermPercentage + finalPercentage;
+    const weightedTheory = theoryTotal * 0.6666;
+
+    // Lab assignment calculation
+    const totalLabAssignmentObtained = labAssignmentScores.reduce((sum, labAssignment) => sum + labAssignment.obtained, 0);
+    const totalLabAssignmentMarks = labAssignmentScores.reduce((sum, labAssignment) => sum + labAssignment.total, 0);
+    const labAssignmentPercentage = totalLabAssignmentObtained / totalLabAssignmentMarks * 25;
+
+    // Lab midterm calculation
+    const labMidtermPercentage = (labMidterm.obtained / labMidterm.total) * 25;
+
+    // Lab final calculation (only if after midterm)
+    const labFinalPercentage = isAfterMid ? (labFinal.obtained / labFinal.total) * 50 : 0;
+
+    // Lab total and weight (33.33%)
+    const labTotal = labAssignmentPercentage + labMidtermPercentage + labFinalPercentage;
+    const weightedLab = labTotal * 0.3333;
 
     // Final percentage
-    const totalPercentage = theoryTotal + labTotal;
+    const totalPercentage = weightedTheory + weightedLab;
 
-    // Map percentage to GPA
+    // GPA mapping
     const gpaMapping = [
       { min: 85, max: 100, gpa: 4.00 },
       { min: 80, max: 84.9, gpa: 3.66 },
@@ -71,17 +116,14 @@ console.log(labTotal);
       { min: 50, max: 53.9, gpa: 1.00 },
       { min: 0, max: 49.9, gpa: 0.00 }
     ];
-    
+
     const gpaEntry = gpaMapping.find(range => totalPercentage >= range.min && totalPercentage <= range.max);
     const calculatedGPA = gpaEntry ? gpaEntry.gpa : 0;
-    
+
     setGpa(calculatedGPA.toFixed(2));
     setPercentage(totalPercentage.toFixed(2));
   };
-
   return (
-    <>
-
     <div className="container mt-5">
       <h2>3 C-R GPA Calculator</h2>
 
@@ -102,80 +144,77 @@ console.log(labTotal);
         </div>
 
         <label>Number of Quizzes</label>
-        <input type="number" value={quizCount} onChange={(e) => setQuizCount(parseInt(e.target.value) || 0)} className="form-control" min="0" />
-        
+        <input type="number" value={quizCount} onChange={(e) => handleQuizCountChange(parseInt(e.target.value) || 0)} className="form-control" min="0" />
+
         {Array.from({ length: quizCount }, (_, index) => (
           <div key={index} className="mt-3">
             <h5>Quiz {index + 1}</h5>
-            <input type="number" placeholder="Obtained" name="obtained" onChange={(e) => handleQuizChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control" min="0" />
-            <input type="number" placeholder="Total" name="total" onChange={(e) => handleQuizChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control mt-2" min="0" />
+            <input type="number" placeholder="Obtained" name="obtained" value={quizScores[index]?.obtained || ''} onChange={(e) => handleQuizChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control" min="0" />
+            <input type="number" placeholder="Total" name="total" value={quizScores[index]?.total || ''} onChange={(e) => handleQuizChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control mt-2" min="0" />
           </div>
         ))}
 
         <label className="mt-4">Number of Assignments</label>
-        <input type="number" value={assignmentCount} onChange={(e) => setAssignmentCount(parseInt(e.target.value) || 0)} className="form-control" min="0" />
+        <input type="number" value={assignmentCount} onChange={(e) => handleAssignmentCountChange(parseInt(e.target.value) || 0)} className="form-control" min="0" />
 
         {Array.from({ length: assignmentCount }, (_, index) => (
           <div key={index} className="mt-3">
             <h5>Assignment {index + 1}</h5>
-            <input type="number" placeholder="Obtained" name="obtained" onChange={(e) => handleAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control" min="0" />
-            <input type="number" placeholder="Total" name="total" onChange={(e) => handleAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control mt-2" min="0" />
+            <input type="number" placeholder="Obtained" name="obtained" value={assignmentScores[index]?.obtained || ''} onChange={(e) => handleAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control" min="0" />
+            <input type="number" placeholder="Total" name="total" value={assignmentScores[index]?.total || ''} onChange={(e) => handleAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control mt-2" min="0" />
           </div>
         ))}
 
-        <div className="mt-4">
-          <h5>Midterm</h5>
-          <input type="number" placeholder="Obtained" name="obtained" value={midterm.obtained} onChange={(e) => setMidterm({ ...midterm, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
-          <input type="number" placeholder="Total" name="total" value={midterm.total} onChange={(e) => setMidterm({ ...midterm, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
-        </div>
+        {/* Midterm and Final for theory */}
+        <label className="mt-4">Midterm</label>
+        <input type="number" placeholder="Obtained" value={midterm.obtained} onChange={(e) => setMidterm({ ...midterm, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
+        <input type="number" placeholder="Total" value={midterm.total} onChange={(e) => setMidterm({ ...midterm, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
 
         {isAfterMid && (
-          <div className="mt-4">
-            <h5>Final</h5>
-            <input type="number" placeholder="Obtained" name="obtained" value={final.obtained} onChange={(e) => setFinal({ ...final, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
-            <input type="number" placeholder="Total" name="total" value={final.total} onChange={(e) => setFinal({ ...final, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
-          </div>
+          <>
+            <label className="mt-4">Final</label>
+            <input type="number" placeholder="Obtained" value={final.obtained} onChange={(e) => setFinal({ ...final, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
+            <input type="number" placeholder="Total" value={final.total} onChange={(e) => setFinal({ ...final, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
+          </>
         )}
       </div>
 
-      <div className="form-group mt-5">
+      <div className="form-group mt-4">
         <h4>Lab Portion</h4>
+
         <label>Number of Lab Assignments</label>
-        <input type="number" value={labAssignmentCount} onChange={(e) => setLabAssignmentCount(parseInt(e.target.value) || 0)} className="form-control" min="0" />
-        
+        <input type="number" value={labAssignmentCount} onChange={(e) => handleLabAssignmentCountChange(parseInt(e.target.value) || 0)} className="form-control" min="0" />
+
         {Array.from({ length: labAssignmentCount }, (_, index) => (
           <div key={index} className="mt-3">
             <h5>Lab Assignment {index + 1}</h5>
-            <input type="number" placeholder="Obtained" name="obtained" onChange={(e) => handleLabAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control" min="0" />
-            <input type="number" placeholder="Total" name="total" onChange={(e) => handleLabAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control mt-2" min="0" />
+            <input type="number" placeholder="Obtained" name="obtained" value={labAssignmentScores[index]?.obtained || ''} onChange={(e) => handleLabAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control" min="0" />
+            <input type="number" placeholder="Total" name="total" value={labAssignmentScores[index]?.total || ''} onChange={(e) => handleLabAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)} className="form-control mt-2" min="0" />
           </div>
         ))}
 
-        <div className="mt-4">
-          <h5>Lab Midterm</h5>
-          <input type="number" placeholder="Obtained" name="obtained" value={labMidterm.obtained} onChange={(e) => setLabMidterm({ ...labMidterm, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
-          <input type="number" placeholder="Total" name="total" value={labMidterm.total} onChange={(e) => setLabMidterm({ ...labMidterm, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
-        </div>
+        <label className="mt-4">Lab Midterm</label>
+        <input type="number" placeholder="Obtained" value={labMidterm.obtained} onChange={(e) => setLabMidterm({ ...labMidterm, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
+        <input type="number" placeholder="Total" value={labMidterm.total} onChange={(e) => setLabMidterm({ ...labMidterm, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
 
         {isAfterMid && (
-          <div className="mt-4">
-            <h5>Lab Final</h5>
-            <input type="number" placeholder="Obtained" name="obtained" value={labFinal.obtained} onChange={(e) => setLabFinal({ ...labFinal, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
-            <input type="number" placeholder="Total" name="total" value={labFinal.total} onChange={(e) => setLabFinal({ ...labFinal, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
-          </div>
+          <>
+            <label className="mt-4">Lab Final</label>
+            <input type="number" placeholder="Obtained" value={labFinal.obtained} onChange={(e) => setLabFinal({ ...labFinal, obtained: parseFloat(e.target.value) || 0 })} className="form-control" min="0" />
+            <input type="number" placeholder="Total" value={labFinal.total} onChange={(e) => setLabFinal({ ...labFinal, total: parseFloat(e.target.value) || 0 })} className="form-control mt-2" min="0" />
+          </>
         )}
       </div>
 
       <button className="btn btn-primary mt-4" onClick={calculateGPA}>Calculate GPA</button>
 
-      {gpa !== null && (
+      {gpa && (
         <div className="mt-4">
-          <h3>Your GPA: {gpa}</h3>
-          <h3>Your Percentage: {percentage}%</h3>
+          <h4>GPA: {gpa}</h4>
+          <h4>Percentage: {percentage}%</h4>
         </div>
       )}
     </div>
-    </>
   );
 };
 

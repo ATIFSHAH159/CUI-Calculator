@@ -3,8 +3,8 @@ import { Form } from 'react-bootstrap'; // Import from react-bootstrap
 import './Assests/ThreeLabsub.css';
 
 const Simplethreesubject = () => {
-  const [quizCount, setQuizCount] = useState();
-  const [assignmentCount, setAssignmentCount] = useState();
+  const [quizCount, setQuizCount] = useState(0);
+  const [assignmentCount, setAssignmentCount] = useState(0);
   const [quizScores, setQuizScores] = useState([]);
   const [assignmentScores, setAssignmentScores] = useState([]);
   const [midterm, setMidterm] = useState({ obtained: '', total: '' });
@@ -23,6 +23,26 @@ const Simplethreesubject = () => {
     const newScores = [...assignmentScores];
     newScores[index] = { ...newScores[index], [name]: value };
     setAssignmentScores(newScores);
+  };
+
+  const handleQuizCountChange = (count) => {
+    // Extend quizScores array if increasing count
+    const updatedScores = [...quizScores];
+    while (updatedScores.length < count) {
+      updatedScores.push({ obtained: 0, total: 0 });
+    }
+    setQuizScores(updatedScores.slice(0, count));
+    setQuizCount(count);
+  };
+
+  const handleAssignmentCountChange = (count) => {
+    // Extend assignmentScores array if increasing count
+    const updatedScores = [...assignmentScores];
+    while (updatedScores.length < count) {
+      updatedScores.push({ obtained: 0, total: 0 });
+    }
+    setAssignmentScores(updatedScores.slice(0, count));
+    setAssignmentCount(count);
   };
 
   const calculateGPA = () => {
@@ -76,18 +96,19 @@ const Simplethreesubject = () => {
         <input
           type="number"
           value={quizCount}
-          onChange={(e) => setQuizCount(parseInt(e.target.value) || 0)}
+          onChange={(e) => handleQuizCountChange(parseInt(e.target.value) || 0)}
           className="form-control"
           min="0"
         />
 
-        {Array.from({ length: quizCount }, (_, index) => (
+        {quizScores.map((quiz, index) => (
           <div key={index} className="mt-3">
             <h5>Quiz {index + 1}</h5>
             <input
               type="number"
               placeholder="Obtained"
               name="obtained"
+              value={quiz.obtained}
               onChange={(e) => handleQuizChange(index, e.target.name, parseFloat(e.target.value) || 0)}
               className="form-control"
               min="0"
@@ -96,6 +117,7 @@ const Simplethreesubject = () => {
               type="number"
               placeholder="Total"
               name="total"
+              value={quiz.total}
               onChange={(e) => handleQuizChange(index, e.target.name, parseFloat(e.target.value) || 0)}
               className="form-control mt-2"
               min="0"
@@ -107,18 +129,19 @@ const Simplethreesubject = () => {
         <input
           type="number"
           value={assignmentCount}
-          onChange={(e) => setAssignmentCount(parseInt(e.target.value) || 0)}
+          onChange={(e) => handleAssignmentCountChange(parseInt(e.target.value) || 0)}
           className="form-control"
           min="0"
         />
 
-        {Array.from({ length: assignmentCount }, (_, index) => (
+        {assignmentScores.map((assignment, index) => (
           <div key={index} className="mt-3">
             <h5>Assignment {index + 1}</h5>
             <input
               type="number"
               placeholder="Obtained"
               name="obtained"
+              value={assignment.obtained}
               onChange={(e) => handleAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)}
               className="form-control"
               min="0"
@@ -127,6 +150,7 @@ const Simplethreesubject = () => {
               type="number"
               placeholder="Total"
               name="total"
+              value={assignment.total}
               onChange={(e) => handleAssignmentChange(index, e.target.name, parseFloat(e.target.value) || 0)}
               className="form-control mt-2"
               min="0"
@@ -179,28 +203,22 @@ const Simplethreesubject = () => {
             />
           </div>
         )}
+
+        <button className="btn btn-primary mt-4" onClick={calculateGPA}>
+          Calculate GPA
+        </button>
+
+        {gpa && (
+          <div className="mt-4">
+            <h4>Calculated GPA: {gpa}</h4>
+            <h4>Total Percentage: {percentage}%</h4>
+          </div>
+        )}
+
+        <button className="btn btn-secondary mt-4" onClick={() => setToggleMidFinal(!toggleMidFinal)}>
+          Toggle Midterm/Final
+        </button>
       </div>
-
-      {/* Toggle between before/after midterm using a switch */}
-      <Form.Check
-        type="switch"
-        id="midterm-toggle"
-        label={toggleMidFinal ? 'After Midterm' : 'Before Midterm'}
-        checked={toggleMidFinal}
-        onChange={() => setToggleMidFinal(!toggleMidFinal)}
-        className="mt-4"
-      />
-
-      <button onClick={calculateGPA} className="btn btn-primary mt-4">
-        Calculate GPA
-      </button>
-
-      {gpa && (
-        <div className="mt-4">
-          <h5>GPA: {gpa}</h5>
-          <h5>Percentage: {percentage}%</h5>
-        </div>
-      )}
     </div>
   );
 };
