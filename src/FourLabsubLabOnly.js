@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Assests/Fourlab.css';
 
 const FourLabsubLabOnly = () => {
-  const [labAssignmentCount, setLabAssignmentCount] = useState(0);
+  const [labAssignmentCount, setLabAssignmentCount] = useState();
   const [labAssignmentScores, setLabAssignmentScores] = useState([]);
   const [labMidterm, setLabMidterm] = useState({ obtained: '', total: '' });
   const [labFinal, setLabFinal] = useState({ obtained: '', total: '' });
@@ -46,7 +46,7 @@ const FourLabsubLabOnly = () => {
 
   return (
     <div className="container mt-5">
-      <h2>4 CH LAB</h2>
+      <h2>4 CR LAB</h2>
 
       <div className="form-group mt-4">
         <h4>Lab Portion</h4>

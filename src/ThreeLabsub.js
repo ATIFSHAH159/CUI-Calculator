@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './Assests/ThreeLabsub.css'; 
 
 const ThreeLabsub = () => {
-  const [quizCount, setQuizCount] = useState(0);
-  const [assignmentCount, setAssignmentCount] = useState(0);
-  const [labAssignmentCount, setLabAssignmentCount] = useState(0);
+  const [quizCount, setQuizCount] = useState();
+  const [assignmentCount, setAssignmentCount] = useState();
+  const [labAssignmentCount, setLabAssignmentCount] = useState();
   const [quizScores, setQuizScores] = useState([]);
   const [assignmentScores, setAssignmentScores] = useState([]);
   const [labAssignmentScores, setLabAssignmentScores] = useState([]);
@@ -83,7 +83,7 @@ console.log(labTotal);
     <>
 
     <div className="container mt-5">
-      <h2>3 C-H GPA Calculator</h2>
+      <h2>3 C-R GPA Calculator</h2>
 
       <div className="form-group">
         <h4>Theory Portion</h4>

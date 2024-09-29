@@ -3,8 +3,8 @@ import { Form } from 'react-bootstrap'; // Import from react-bootstrap
 import './Assests/ThreeLabsub.css';
 
 const Simplethreesubject = () => {
-  const [quizCount, setQuizCount] = useState(0);
-  const [assignmentCount, setAssignmentCount] = useState(0);
+  const [quizCount, setQuizCount] = useState();
+  const [assignmentCount, setAssignmentCount] = useState();
   const [quizScores, setQuizScores] = useState([]);
   const [assignmentScores, setAssignmentScores] = useState([]);
   const [midterm, setMidterm] = useState({ obtained: '', total: '' });
@@ -67,7 +67,7 @@ const Simplethreesubject = () => {
 
   return (
     <div className="container mt-5">
-      <h2>3 C-H GPA Calculator</h2>
+      <h2>3 C-R GPA Calculator</h2>
 
       <div className="form-group">
         <h4>{toggleMidFinal ? 'After Midterm' : 'Before Midterm'} Portion</h4>
