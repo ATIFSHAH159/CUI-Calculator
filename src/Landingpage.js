@@ -1,34 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Assests/Landingpage.css';
+import grading from './Images/gradingsystem.png';
+import Footer from './Footer';
 const LandingPage = () => {
   return (
-    <div className="landing-container">
-      <h1>Welcome to the GPA Calculator</h1>
-      <div className="button-group">
-        <Link to="/3labsub">
-          <button className="button color1">3 CH LAB+SUB</button>
-        </Link>
-        <Link to="/3labsubonly">
-          <button className="button color2">3 CR LAB</button>
-        </Link>
-        <Link to="/3chsimple">
-          <button className="button color3">3 CR SIMPLE SUBJECT</button>
-        </Link>
-        <Link to="/4labsubonly">
-          <button className="button color4">4 CR LAB</button>
-        </Link>
-        <Link to="/4chlab">
-          <button className="button color5">4 CH LAB+SUB</button>
-        </Link>
-        <Link to="/semester-gpa">
-          <button className="button color6">SEMESTER GPA</button>
-        </Link>
-        <Link to="/cgpa">
-          <button className="button color7">CGPA CALCULATE</button> 
-        </Link>
-      </div>
+    <>
+  <div className='landingpagecontainer'> 
+    <div className='containerleft'>
+    <b>COMSATS Grading System</b>
+    <br/>
+Understanding the grading system of your university is crucial for tracking your academic progress and planning your studies effectively. For students at the COMSATS Institute of Information Technology, the GPA system is a key component in measuring academic performance. This blog provides a detailed explanation of the COMSATS GPA system, including the calculation methods and the grading scale.
+<br/>
+<b>Absolute Grading System</b>
+<br/>
+COMSATS employs an absolute grading system to assess student performance. Unlike relative grading systems, where grades are assigned based on a comparison with peers, the absolute grading system awards grades based on predetermined thresholds. This ensures that students are evaluated strictly on their individual performance.
     </div>
+    <div className='containerright'>
+    <img src={grading} alt=''></img>
+    </div>
+  </div>
+  <Footer/>
+  </>
   );
 };
 

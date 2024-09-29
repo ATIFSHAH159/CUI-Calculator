@@ -1,101 +1,60 @@
-.landing-container {
+.landingpagecontainer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  height: auto;
+  font-family: 'Arial', sans-serif; /* Change the font family */
+}
+
+/* Left container styles */
+.containerleft {
+  width: 70%;
+  height: auto;
+  padding: 20px; /* Add some padding for better spacing */
+  font-size: 18px; /* Increase font size for better readability */
+  line-height: 1.6; /* Increase line height for better spacing */
+}
+
+/* Right container styles */
+.containerright {
+  width: 30%;
+  height: auto;
+  display: flex; /* Center the image */
   justify-content: center;
-  height: 100vh;
-  text-align: center;
-  background-image: url('../Images/landingpagebg.jpg'); /* Ensure the image path is correct */
-  background-size: cover; /* Adjust to cover the entire container */
-  background-position: center; /* Center the image */
+  align-items: center;
 }
 
-/* Style for h1 text with matching neon effect */
-.landing-container h1 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #b40a0ae3; /* Light teal color to contrast with the background */
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid;
-  width: 29ch;
-  animation: typing 3.5s steps(29), blink 0.75s step-end infinite alternate, deleting 3.5s steps(29) 3.5s infinite;
-  text-shadow: 0 0 5px #00eaff, 0 0 10px #ff3300, 0 0 15px rgba(0, 234, 255, 0.7), 0 0 20px rgba(0, 234, 255, 0.5); /* Softer glow */
-  font-weight: bold;
+.containerright img {
+  max-width: 100%; /* Ensure image is responsive */
+  height: auto; /* Maintain aspect ratio */
 }
 
-/* Typing animation */
-@keyframes typing {
-  from { width: 0; }
-  to { width: 29ch; }
-}
-
-/* Deleting animation */
-@keyframes deleting {
-  from { width: 29ch; }
-  to { width: 0; }
-}
-
-/* Cursor blink animation */
-@keyframes blink {
-  from { border-color: transparent; }
-  to { border-color: #00eaff; }
-}
-
-/* Button styling */
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.button {
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-  border-radius: 5px;
-  transition: transform 0.3s ease;
-}
-
-.button:hover {
-  transform: scale(1.05);
-}
-
-/* Color classes for buttons */
-.color1 { background-color: #3498db; }
-.color2 { background-color: #e74c3c; }
-.color3 { background-color: #2ecc71; }
-.color4 { background-color: #f1c40f; }
-.color5 { background-color: #9b59b6; }
-.color6 { background-color: #e67e22; }
-.color7 { background-color: #1abc9c; }
-
-/* Responsive Design */
+/* Responsive Styles */
 @media (max-width: 768px) {
-  .landing-container h1 {
-    font-size: 2rem;
+  .landingpagecontainer {
+    flex-direction: column; /* Switch to column layout */
   }
 
-  .button {
-    padding: 0.8rem 1.5rem;
-    font-size: 0.9rem;
+  .containerleft,
+  .containerright {
+    width: 100%; /* Take full width */
+  }
+
+  .containerleft {
+    border: none; /* Optionally remove the border on small screens */
+  }
+
+  .containerright {
+    border: none; /* Optionally remove the border on small screens */
+    margin-top: 20px; /* Add margin for spacing */
   }
 }
 
-@media (max-width: 480px) {
-  .landing-container h1 {
-    font-size: 1.5rem;
-  }
+/* Additional Styles for Text */
+.containerleft b {
+  font-size: 24px; /* Make the bold text larger */
+  color: #2c3e50; /* Change color to a darker shade for emphasis */
+}
 
-  .button-group {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  .button {
-    width: 100%;
-    padding: 0.8rem;
-  }
+.containerleft p {
+  margin: 0; /* Remove default margin */
 }

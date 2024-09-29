@@ -80,6 +80,8 @@ console.log(labTotal);
   };
 
   return (
+    <>
+
     <div className="container mt-5">
       <h2>3 C-H GPA Calculator</h2>
 
@@ -173,6 +175,7 @@ console.log(labTotal);
         </div>
       )}
     </div>
+    </>
   );
 };
 
