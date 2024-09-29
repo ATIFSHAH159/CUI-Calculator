@@ -47,12 +47,12 @@ function Dropdown() {
       <b>Select Calculator:</b>
       <select className="custom-select" onChange={handleChange} value={selectedOption}>
         <option value="" disabled>Select</option>
-        <option value="/">home</option>
-        <option value="/3labsub">3 CH LAB+SUB</option>
+        <option value="/">Home</option>
+        <option value="/3labsub">3 CR LAB+SUB</option>
         <option value="/3labsubonly">3 CR LAB</option>
         <option value="/3chsimple">3 CR SIMPLE SUBJECT</option>
         <option value="/4labsubonly">4 CR LAB</option>
-        <option value="/4chlab">4 CH LAB+SUB</option>
+        <option value="/4chlab">4 CR LAB+SUB</option>
         <option value="/semester-gpa">SEMESTER GPA</option>
         <option value="/cgpa">CGPA CALCULATE</option>
       </select>
