@@ -24,9 +24,6 @@ function Footer() {
           </a>
         </div>
       </div>
-      <div className="footer-copyright">
-        <p>&copy; LogicSphere</p>
-      </div>
     </footer>
   );
 }
